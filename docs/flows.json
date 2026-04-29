@@ -13,25 +13,8 @@
         "name": "═══ LAYER 2: MQTT Transport (Sparkplug B) ═══",
         "info": "",
         "x": 300,
-        "y": 40
-    },
-    {
-        "id": "mqtt_broker_config",
-        "type": "mqtt-broker",
-        "name": "Mosquitto (Group 24)",
-        "broker": "mosquitto",
-        "port": "1883",
-        "clientid": "nodered-group24",
-        "autoConnect": true,
-        "usetls": false,
-        "credentials": {
-            "user": "nodered",
-            "password": "noderedpass"
-        },
-        "birthTopic": "",
-        "closeTopic": "",
-        "willTopic": "",
-        "willPayload": ""
+        "y": 40,
+        "wires": []
     },
     {
         "id": "mqtt_in_ddata",
@@ -42,9 +25,19 @@
         "qos": "1",
         "datatype": "json",
         "broker": "mqtt_broker_config",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
         "x": 130,
         "y": 120,
-        "wires": [["parse_metrics", "debug_raw", "rul_function", "influx_write", "state_monitor"]]
+        "wires": [
+            [
+                "parse_metrics",
+                "debug_raw",
+                "rul_function",
+                "state_monitor"
+            ]
+        ]
     },
     {
         "id": "mqtt_in_dbirth",
@@ -55,9 +48,16 @@
         "qos": "1",
         "datatype": "json",
         "broker": "mqtt_broker_config",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
         "x": 130,
         "y": 180,
-        "wires": [["debug_birth"]]
+        "wires": [
+            [
+                "debug_birth"
+            ]
+        ]
     },
     {
         "id": "mqtt_in_ddeath",
@@ -68,9 +68,17 @@
         "qos": "1",
         "datatype": "json",
         "broker": "mqtt_broker_config",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
         "x": 130,
         "y": 240,
-        "wires": [["debug_death", "device_offline_alert"]]
+        "wires": [
+            [
+                "debug_death",
+                "device_offline_alert"
+            ]
+        ]
     },
     {
         "id": "mqtt_in_status",
@@ -81,50 +89,66 @@
         "qos": "1",
         "datatype": "utf8",
         "broker": "mqtt_broker_config",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
         "x": 130,
         "y": 300,
-        "wires": [["debug_status"]]
+        "wires": [
+            [
+                "debug_status"
+            ]
+        ]
     },
     {
         "id": "debug_raw",
         "type": "debug",
         "z": "flow_main",
         "name": "Raw DDATA",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
-        "x": 380,
-        "y": 80
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 80,
+        "wires": []
     },
     {
         "id": "debug_birth",
         "type": "debug",
         "z": "flow_main",
         "name": "DBIRTH",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "x": 380,
-        "y": 180
+        "y": 180,
+        "wires": []
     },
     {
         "id": "debug_death",
         "type": "debug",
         "z": "flow_main",
         "name": "DDEATH",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "x": 380,
-        "y": 230
+        "y": 230,
+        "wires": []
     },
     {
         "id": "debug_status",
         "type": "debug",
         "z": "flow_main",
         "name": "Device Status",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "x": 380,
-        "y": 300
+        "y": 300,
+        "wires": []
     },
     {
         "id": "comment_layer3",
@@ -133,7 +157,8 @@
         "name": "═══ LAYER 3: Edge Logic (Data Processing & RUL) ═══",
         "info": "",
         "x": 320,
-        "y": 370
+        "y": 370,
+        "wires": []
     },
     {
         "id": "parse_metrics",
@@ -142,9 +167,22 @@
         "name": "Parse Sparkplug B Metrics",
         "func": "// Parse Sparkplug B metrics array into a flat object\nlet metrics = msg.payload.metrics || [];\nlet parsed = {};\n\nfor (let m of metrics) {\n    parsed[m.name] = m.value;\n}\n\nparsed.timestamp = msg.payload.timestamp;\nparsed.seq = msg.payload.seq;\n\nmsg.payload = parsed;\nmsg.topic = 'transformer01';\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 420,
         "y": 120,
-        "wires": [["dashboard_current", "dashboard_temp", "dashboard_anomaly", "dashboard_actuator", "influx_formatted"]]
+        "wires": [
+            [
+                "dashboard_current",
+                "dashboard_temp",
+                "dashboard_anomaly",
+                "dashboard_actuator",
+                "influx_formatted"
+            ]
+        ]
     },
     {
         "id": "rul_function",
@@ -155,17 +193,24 @@
         "outputs": 1,
         "x": 440,
         "y": 420,
-        "wires": [["dashboard_rul", "influx_rul", "debug_rul"]]
+        "wires": [
+            [
+                "dashboard_rul",
+                "influx_rul",
+                "debug_rul"
+            ]
+        ]
     },
     {
         "id": "debug_rul",
         "type": "debug",
         "z": "flow_main",
         "name": "RUL Output",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "x": 700,
-        "y": 460
+        "y": 460,
+        "wires": []
     },
     {
         "id": "state_monitor",
@@ -174,9 +219,18 @@
         "name": "State Consistency Monitor",
         "func": "// State Consistency Monitoring\n// Checks if actuator state matches expectations\n\nlet metrics = msg.payload.metrics || [];\nlet anomaly = 0, actuator = 0;\n\nfor (let m of metrics) {\n    if (m.name === 'AnomalyScore') anomaly = m.value;\n    if (m.name === 'ActuatorState') actuator = m.value;\n}\n\n// Rule: if anomaly detected but actuator not tripped, flag inconsistency\nlet consistent = true;\nlet alertMsg = '';\n\nif (anomaly > 0 && actuator === 0) {\n    consistent = false;\n    alertMsg = 'WARNING: Anomaly detected but actuator not tripped!';\n}\n\nmsg.payload = {\n    consistent: consistent,\n    alert: alertMsg,\n    anomaly: anomaly,\n    actuator: actuator,\n    timestamp: new Date().toISOString()\n};\n\nif (!consistent) {\n    node.warn(alertMsg);\n}\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 440,
         "y": 480,
-        "wires": [["debug_consistency"]]
+        "wires": [
+            [
+                "debug_consistency"
+            ]
+        ]
     },
     {
         "id": "debug_consistency",
@@ -186,7 +240,8 @@
         "active": false,
         "tosidebar": true,
         "x": 720,
-        "y": 520
+        "y": 520,
+        "wires": []
     },
     {
         "id": "device_offline_alert",
@@ -197,17 +252,22 @@
         "outputs": 1,
         "x": 440,
         "y": 260,
-        "wires": [["debug_alert"]]
+        "wires": [
+            [
+                "debug_alert"
+            ]
+        ]
     },
     {
         "id": "debug_alert",
         "type": "debug",
         "z": "flow_main",
         "name": "Offline Alert",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "x": 700,
-        "y": 260
+        "y": 260,
+        "wires": []
     },
     {
         "id": "comment_layer4",
@@ -216,71 +276,48 @@
         "name": "═══ LAYER 4: Application (Storage, Dashboard, Digital Twin) ═══",
         "info": "",
         "x": 350,
-        "y": 570
-    },
-    {
-        "id": "influx_config",
-        "type": "influxdb",
-        "hostname": "influxdb",
-        "port": "8086",
-        "protocol": "http",
-        "database": "digitaltwin",
-        "name": "InfluxDB (digitaltwin)",
-        "usetls": false,
-        "tls": "",
-        "influxdbVersion": "1.x",
-        "url": "http://influxdb:8086",
-        "rejectUnauthorized": true,
-        "credentials": {
-            "username": "admin",
-            "password": "admin123"
-        }
+        "y": 570,
+        "wires": []
     },
     {
         "id": "influx_formatted",
         "type": "function",
         "z": "flow_main",
         "name": "Format for InfluxDB",
-        "func": "// Format parsed metrics for InfluxDB\nmsg.payload = [\n    {\n        measurement: 'transformer_data',\n        fields: {\n            current: msg.payload.Current || 0,\n            temperature: msg.payload.Temperature || 0,\n            anomaly_score: msg.payload.AnomalyScore || 0,\n            actuator_state: msg.payload.ActuatorState || 0,\n            uptime: msg.payload.UptimeSeconds || 0\n        },\n        tags: {\n            device: 'transformer01',\n            plant: 'plant01',\n            group: 'group24'\n        }\n    }\n];\nreturn msg;",
+        "func": "// For 'influxdb out' node in single-measurement mode,\n// pass fields flat at the top level with no nesting\nmsg.measurement = 'transformer_data';\n\nmsg.payload = {\n    current:        parseFloat(msg.payload.Current)        || 0.0,\n    temperature:    parseFloat(msg.payload.Temperature)    || 0.0,\n    anomaly_score:  parseFloat(msg.payload.AnomalyScore)   || 0.0,\n    actuator_state: parseInt(msg.payload.ActuatorState)    || 0,\n    uptime:         parseInt(msg.payload.UptimeSeconds)    || 0\n};\n\nmsg.tags = {\n    device: 'transformer01',\n    plant:  'plant01',\n    group:  'group24'\n};\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 700,
         "y": 140,
-        "wires": [["influx_write"]]
-    },
-    {
-        "id": "influx_write",
-        "type": "influxdb out",
-        "z": "flow_main",
-        "influxdb": "influx_config",
-        "name": "Write to InfluxDB",
-        "measurement": "transformer_data",
-        "precision": "ms",
-        "retpolicy": "",
-        "database": "digitaltwin",
-        "x": 940,
-        "y": 140
+        "wires": [
+            [
+                "influx_write"
+            ]
+        ]
     },
     {
         "id": "influx_rul",
         "type": "function",
         "z": "flow_main",
         "name": "Format RUL for InfluxDB",
-        "func": "msg.payload = [\n    {\n        measurement: 'rul_estimation',\n        fields: {\n            rul_hours: msg.payload.rulHours || -1,\n            current_temp: msg.payload.currentTemp || 0,\n            history_length: msg.payload.historyLength || 0\n        },\n        tags: {\n            device: 'transformer01',\n            group: 'group24'\n        }\n    }\n];\nreturn msg;",
+        "func": "// Format RUL data for InfluxDB - SIMPLE VERSION\nlet rul_hours = 0;\nlet rul_status = \"unknown\";\n\n// Extract RUL value from payload\nif (msg.payload.rul) {\n    if (typeof msg.payload.rul === 'object') {\n        rul_hours = parseFloat(msg.payload.rul.rul_hours) || 0;\n        rul_status = String(msg.payload.rul.rul_status || \"unknown\");\n    } else if (typeof msg.payload.rul === 'string') {\n        // Try to extract number from string like \"12.5 hours\"\n        let match = msg.payload.rul.match(/(\\d+(?:\\.\\d+)?)/);\n        rul_hours = match ? parseFloat(match[1]) : 0;\n        rul_status = msg.payload.rul;\n    } else {\n        rul_hours = parseFloat(msg.payload.rul) || 0;\n    }\n}\n\n// Format for InfluxDB - MUST be flat structure\nmsg.measurement = 'rul_estimation';\nmsg.fields = {\n    rul_hours: rul_hours,\n    rul_status: rul_status\n};\nmsg.tags = {\n    device: 'transformer01',\n    group: 'group24'\n};\nmsg.timestamp = Date.now() * 1000000;\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 720,
         "y": 420,
-        "wires": [["influx_write_rul"]]
-    },
-    {
-        "id": "influx_write_rul",
-        "type": "influxdb out",
-        "z": "flow_main",
-        "influxdb": "influx_config",
-        "name": "Write RUL to InfluxDB",
-        "measurement": "rul_estimation",
-        "precision": "ms",
-        "x": 960,
-        "y": 420
+        "wires": [
+            [
+                "influx_write_rul"
+            ]
+        ]
     },
     {
         "id": "comment_digitaltwin",
@@ -289,41 +326,187 @@
         "name": "═══ DIGITAL TWIN: Bidirectional Control ═══",
         "info": "",
         "x": 310,
-        "y": 640
+        "y": 640,
+        "wires": []
     },
     {
-        "id": "ui_group_main",
-        "type": "ui_group",
-        "name": "Transformer Monitor",
-        "tab": "ui_tab_main",
+        "id": "whatif_format",
+        "type": "function",
+        "z": "flow_main",
+        "name": "Format What-If Command",
+        "func": "msg.payload = JSON.stringify({\n    timestamp: new Date().toISOString(),\n    metrics: [\n        {name: 'WhatIfLoad', value: msg.payload}\n    ]\n});\nreturn msg;",
+        "outputs": 1,
+        "x": 380,
+        "y": 780,
+        "wires": [
+            [
+                "mqtt_out_dcmd"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out_dcmd",
+        "type": "mqtt out",
+        "z": "flow_main",
+        "name": "Publish DCMD",
+        "topic": "spBv1.0/group24/DCMD/plant01/transformer01",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker_config",
+        "x": 660,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "trip_button",
+        "type": "ui_button",
+        "z": "flow_main",
+        "name": "Trip Actuator",
+        "group": "ui_group_control",
         "order": 1,
-        "disp": true,
-        "width": "12"
+        "width": "6",
+        "height": "1",
+        "passthru": false,
+        "label": "⚡ TRIP ACTUATOR",
+        "tooltip": "Send trip command to transformer actuator",
+        "color": "#ffffff",
+        "bgcolor": "#c62828",
+        "className": "",
+        "icon": "fa-power-off",
+        "payload": "{\"timestamp\":\"{{$millis()}}\",\"metrics\":[{\"name\":\"ActuatorCommand\",\"value\":1}]}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 150,
+        "y": 700,
+        "wires": [
+            [
+                "mqtt_out_dcmd"
+            ]
+        ]
     },
     {
-        "id": "ui_group_control",
-        "type": "ui_group",
-        "name": "Digital Twin Control",
-        "tab": "ui_tab_main",
+        "id": "reset_button",
+        "type": "ui_button",
+        "z": "flow_main",
+        "name": "Reset Actuator",
+        "group": "ui_group_control",
         "order": 2,
-        "disp": true,
-        "width": "6"
+        "width": "6",
+        "height": "1",
+        "passthru": false,
+        "label": "✅ RESET ACTUATOR",
+        "tooltip": "Reset the actuator to normal state",
+        "color": "#ffffff",
+        "bgcolor": "#2e7d32",
+        "className": "",
+        "icon": "fa-check-circle",
+        "payload": "{\"timestamp\":\"{{$millis()}}\",\"metrics\":[{\"name\":\"ActuatorCommand\",\"value\":0}]}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 150,
+        "y": 740,
+        "wires": [
+            [
+                "mqtt_out_dcmd"
+            ]
+        ]
     },
     {
-        "id": "ui_group_rul",
-        "type": "ui_group",
-        "name": "RUL & Analytics",
-        "tab": "ui_tab_main",
+        "id": "whatif_slider",
+        "type": "ui_slider",
+        "z": "flow_main",
+        "name": "What-If Load (A)",
+        "label": "What-If Load (A)",
+        "tooltip": "",
+        "group": "ui_group_control",
         "order": 3,
-        "disp": true,
-        "width": "6"
+        "width": "6",
+        "height": "1",
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": 30,
+        "step": "0.5",
+        "className": "",
+        "x": 150,
+        "y": 780,
+        "wires": [
+            [
+                "whatif_format"
+            ]
+        ]
     },
     {
-        "id": "ui_tab_main",
-        "type": "ui_tab",
-        "name": "Digital Twin - Group 24",
-        "icon": "dashboard",
-        "order": 1
+        "id": "dashboard_anomaly",
+        "type": "ui_text",
+        "z": "flow_main",
+        "group": "ui_group_main",
+        "order": 3,
+        "width": "4",
+        "height": "2",
+        "name": "Anomaly Status",
+        "label": "Anomaly Status",
+        "format": "{{msg.payload.AnomalyScore > 0 ? '🔴 ANOMALY DETECTED' : '🟢 Normal'}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 700,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "dashboard_actuator",
+        "type": "ui_text",
+        "z": "flow_main",
+        "group": "ui_group_main",
+        "order": 4,
+        "width": "4",
+        "height": "2",
+        "name": "Actuator State",
+        "label": "Actuator",
+        "format": "{{msg.payload.ActuatorState === 1 ? '⚡ TRIPPED' : '✅ Normal'}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 800,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "dashboard_rul",
+        "type": "ui_text",
+        "z": "flow_main",
+        "group": "ui_group_rul",
+        "order": 1,
+        "width": "6",
+        "height": "2",
+        "name": "RUL Display",
+        "label": "Remaining Useful Life",
+        "format": "{{msg.payload.rul}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 700,
+        "y": 380,
+        "wires": []
     },
     {
         "id": "dashboard_current",
@@ -340,11 +523,18 @@
         "format": "{{msg.payload.Current | number:2}}",
         "min": 0,
         "max": 30,
-        "colors": ["#00b500", "#e6e600", "#ca3838"],
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
         "seg1": 12,
         "seg2": 15,
+        "diff": false,
+        "className": "",
         "x": 700,
-        "y": 620
+        "y": 620,
+        "wires": []
     },
     {
         "id": "dashboard_temp",
@@ -361,142 +551,138 @@
         "format": "{{msg.payload.Temperature | number:1}}",
         "min": 0,
         "max": 120,
-        "colors": ["#00b500", "#e6e600", "#ca3838"],
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
         "seg1": 60,
         "seg2": 85,
+        "diff": false,
+        "className": "",
         "x": 700,
-        "y": 660
+        "y": 660,
+        "wires": []
     },
     {
-        "id": "dashboard_anomaly",
-        "type": "ui_text",
+        "id": "influx_write",
+        "type": "influxdb out",
         "z": "flow_main",
-        "group": "ui_group_main",
-        "order": 3,
-        "width": "4",
-        "height": "2",
-        "name": "Anomaly Status",
-        "label": "Anomaly Status",
-        "format": "{{msg.payload.AnomalyScore > 0 ? '🔴 ANOMALY DETECTED' : '🟢 Normal'}}",
-        "layout": "row-spread",
-        "x": 700,
-        "y": 700
+        "influxdb": "influx_config",
+        "name": "Write to InfluxDB",
+        "measurement": "transformer_data",
+        "precision": "ms",
+        "retentionPolicy": "",
+        "database": "digitaltwin",
+        "retentionPolicyV18Flux": "",
+        "org": "",
+        "bucket": "",
+        "x": 940,
+        "y": 140,
+        "wires": []
     },
     {
-        "id": "dashboard_actuator",
-        "type": "ui_text",
+        "id": "influx_write_rul",
+        "type": "influxdb out",
         "z": "flow_main",
-        "group": "ui_group_main",
-        "order": 4,
-        "width": "4",
-        "height": "2",
-        "name": "Actuator State",
-        "label": "Actuator",
-        "format": "{{msg.payload.ActuatorState === 1 ? '⚡ TRIPPED' : '✅ Normal'}}",
-        "layout": "row-spread",
-        "x": 700,
-        "y": 740
+        "influxdb": "influx_config",
+        "name": "Write RUL to InfluxDB",
+        "measurement": "rul_estimation",
+        "precision": "ms",
+        "retentionPolicy": "",
+        "database": "",
+        "retentionPolicyV18Flux": "",
+        "org": "",
+        "bucket": "",
+        "x": 960,
+        "y": 420,
+        "wires": []
     },
     {
-        "id": "trip_button",
-        "type": "ui_button",
-        "z": "flow_main",
-        "name": "Trip Actuator",
-        "group": "ui_group_control",
-        "order": 1,
-        "width": "6",
-        "height": "1",
-        "passthru": false,
-        "label": "⚡ TRIP ACTUATOR",
-        "tooltip": "Send trip command to transformer actuator",
-        "color": "#ffffff",
-        "bgcolor": "#c62828",
-        "icon": "fa-power-off",
-        "payload": "{\"timestamp\":\"{{$millis()}}\",\"metrics\":[{\"name\":\"ActuatorCommand\",\"value\":1}]}",
-        "payloadType": "json",
-        "topic": "",
-        "x": 150,
-        "y": 700,
-        "wires": [["mqtt_out_dcmd"]]
+        "id": "mqtt_broker_config",
+        "type": "mqtt-broker",
+        "name": "Mosquitto (Group 24)",
+        "broker": "mosquitto",
+        "port": "1883",
+        "clientid": "nodered-group24",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
-        "id": "reset_button",
-        "type": "ui_button",
-        "z": "flow_main",
-        "name": "Reset Actuator",
-        "group": "ui_group_control",
+        "id": "ui_group_control",
+        "type": "ui_group",
+        "name": "Digital Twin Control",
+        "tab": "ui_tab_main",
         "order": 2,
-        "width": "6",
-        "height": "1",
-        "passthru": false,
-        "label": "✅ RESET ACTUATOR",
-        "tooltip": "Reset the actuator to normal state",
-        "color": "#ffffff",
-        "bgcolor": "#2e7d32",
-        "icon": "fa-check-circle",
-        "payload": "{\"timestamp\":\"{{$millis()}}\",\"metrics\":[{\"name\":\"ActuatorCommand\",\"value\":0}]}",
-        "payloadType": "json",
-        "topic": "",
-        "x": 150,
-        "y": 740,
-        "wires": [["mqtt_out_dcmd"]]
+        "disp": true,
+        "width": "6"
     },
     {
-        "id": "whatif_slider",
-        "type": "ui_slider",
-        "z": "flow_main",
-        "name": "What-If Load (A)",
-        "group": "ui_group_control",
-        "order": 3,
-        "width": "6",
-        "height": "1",
-        "passthru": true,
-        "outs": "end",
-        "topic": "",
-        "min": 0,
-        "max": 30,
-        "step": "0.5",
-        "label": "What-If Load (A)",
-        "x": 150,
-        "y": 780,
-        "wires": [["whatif_format"]]
-    },
-    {
-        "id": "whatif_format",
-        "type": "function",
-        "z": "flow_main",
-        "name": "Format What-If Command",
-        "func": "msg.payload = JSON.stringify({\n    timestamp: new Date().toISOString(),\n    metrics: [\n        {name: 'WhatIfLoad', value: msg.payload}\n    ]\n});\nreturn msg;",
-        "outputs": 1,
-        "x": 380,
-        "y": 780,
-        "wires": [["mqtt_out_dcmd"]]
-    },
-    {
-        "id": "mqtt_out_dcmd",
-        "type": "mqtt out",
-        "z": "flow_main",
-        "name": "Publish DCMD",
-        "topic": "spBv1.0/group24/DCMD/plant01/transformer01",
-        "qos": "1",
-        "retain": "",
-        "broker": "mqtt_broker_config",
-        "x": 580,
-        "y": 740
-    },
-    {
-        "id": "dashboard_rul",
-        "type": "ui_text",
-        "z": "flow_main",
-        "group": "ui_group_rul",
+        "id": "ui_group_main",
+        "type": "ui_group",
+        "name": "Transformer Monitor",
+        "tab": "ui_tab_main",
         "order": 1,
-        "width": "6",
-        "height": "2",
-        "name": "RUL Display",
-        "label": "Remaining Useful Life",
-        "format": "{{msg.payload.rul}}",
-        "layout": "row-spread",
-        "x": 700,
-        "y": 380
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_group_rul",
+        "type": "ui_group",
+        "name": "RUL & Analytics",
+        "tab": "ui_tab_main",
+        "order": 3,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "influx_config",
+        "type": "influxdb",
+        "hostname": "influxdb",
+        "port": "8086",
+        "protocol": "http",
+        "database": "digitaltwin",
+        "name": "InfluxDB (digitaltwin)",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://influxdb:8086",
+        "timeout": "",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "ui_tab_main",
+        "type": "ui_tab",
+        "name": "Digital Twin - Group 24",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "942f3f9ac167e941",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-contrib-influxdb": "0.7.0"
+        }
     }
 ]
