@@ -1,5 +1,5 @@
 # Industrial Digital Twin – Transformer Health Monitoring System
-### CO326 Course Project | Group 24 | University of Peradeniya
+### CO326 Course Project | Group 01 | University of Peradeniya
 
 ---
 
