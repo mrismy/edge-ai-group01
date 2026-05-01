@@ -1,0 +1,28 @@
+# ============================================
+# Digital Twin Group 24 - Environment Variables
+# ============================================
+# DO NOT commit this file to version control!
+
+# MQTT Broker
+MQTT_BROKER_HOST=localhost
+MQTT_BROKER_PORT=1883
+MQTT_USERNAME=group24
+MQTT_PASSWORD=group24pass
+
+# InfluxDB
+INFLUXDB_DB=digitaltwin
+INFLUXDB_ADMIN_USER=admin
+INFLUXDB_ADMIN_PASSWORD=admin123
+
+# Grafana
+GF_SECURITY_ADMIN_USER=admin
+GF_SECURITY_ADMIN_PASSWORD=admin
+
+# Modbus TCP
+MODBUS_HOST=localhost
+MODBUS_PORT=502
+
+# Sparkplug B Namespace
+SPB_GROUP_ID=group24
+SPB_EDGE_NODE_ID=plant01
+SPB_DEVICE_ID=transformer01
